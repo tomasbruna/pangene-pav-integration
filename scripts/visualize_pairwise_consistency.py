@@ -137,7 +137,7 @@ def reorder_by_file(items, order_file):
 
 def create_heatmap(pairs, color_metric, mappingThreshold,
                               count_metric='lociNum',
-                              title="", figsize=(10.2, 8.5), cmap="YlGnBu",
+                              title="", figsize=(10.2, 8.5), cmap="magma_r",
                               noCellText=False,
                               save_csv=False,
                               csv_dir=None,
@@ -180,7 +180,13 @@ def create_heatmap(pairs, color_metric, mappingThreshold,
     count_array = np.array(count_matrix, dtype=object)
 
     color_df = pd.DataFrame(color_array, index=sources, columns=targets)
-    
+
+    # Fill diagonal with 100
+    for i in range(len(sources)):
+        if i < len(targets) and sources[i] == targets[i]:
+            color_df.iloc[i, i] = 100
+            count_array[i, i] = 0  # or any appropriate value
+
     if save_csv:
         csv_filename = f'{color_metric}_{mappingThreshold}.csv'
         if csv_dir:
