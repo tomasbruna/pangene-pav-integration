@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
+from collections import Counter
 
 
 class Pair:
@@ -65,18 +66,18 @@ class Pair:
 
     def makeComparison(self, liftoffFolder, mappingThreshold, usemRNA=False):
         outFname = (f"{liftoffFolder}/{os.path.basename(self.liftoff)}_"
-                    f"{mappingThreshold}.gffcmp")
+                    f"{mappingThreshold}.gffcmp.tracking")
         if os.path.exists(outFname):
             self.comparison = outFname
             return
-        
+
         selectedLiftoff = self._select(mappingThreshold, usemRNA)
 
         prefix = ''.join(random.choice(string.ascii_letters) for _ in range(5))
-        systemCall(f"gffcompare -D -T -o {prefix} -r {selectedLiftoff} "
-                   f"{self.targetFile}")
+        systemCall(f"gffcompare --strict-match -e 3 -D -T -o {prefix} -r {self.targetFile} "
+                   f"{selectedLiftoff}")
 
-        shutil.move(f"{prefix}.stats", outFname)
+        shutil.move(f"{prefix}.tracking", outFname)
         self.comparison = outFname
 
         # Cleanup
@@ -84,7 +85,7 @@ class Pair:
             os.remove(file_path)
         os.unlink(selectedLiftoff)
 
-    def parseComparisons(self):
+    def parseComparisonsFromStats(self):
         with open(self.comparison) as file:
             content = file.read()
         gene_identity_match = re.search(r'Locus level:\s+(\d+\.\d+)', content)
@@ -93,8 +94,28 @@ class Pair:
         missedLoci_match = re.search(r'Missed loci:\s+(\d+)/(\d+)', content)
         missed = float(missedLoci_match.group(1))
         total = float(missedLoci_match.group(2))
+
         self.lociNum = int(total)
         self.gene_presence = round(100 * (total - missed) / total, 2)
+
+
+    def parseComparisons(self):
+        matchTypes = []
+        with open(self.comparison) as file:
+            for l in file:
+                matchTypes.append(l.split()[3])
+
+        total = len(matchTypes)
+        matchCounts = Counter(matchTypes)
+        # Count a subset as an exact match (for lifted truncated genes).
+        exactMatches = sum(matchCounts[key] for key in
+                         ["=", "c"])
+        anyOverlap = sum(matchCounts[key] for key in
+                         ["=", "c", "k", "m", "n", "j", "e", "o", "~"])
+
+        self.lociNum = total
+        self.gene_identity = round(100 * exactMatches / total, 2)
+        self.gene_presence = round(100 * anyOverlap / total, 2)
 
 
 def read_order_file(order_file):
