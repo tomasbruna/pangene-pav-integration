@@ -222,10 +222,13 @@ def create_heatmap(pairs, color_metric, mappingThreshold,
     annot = np.empty_like(color_array, dtype=object)
     for i in range(len(sources)):
         for j in range(len(targets)):
-            if not np.isnan(color_array[i, j]) and not pd.isna(count_array[i, j]):
-                annot[i, j] = ""
+            if i == j:
+                annot[i, j] = ""   # No cell text on diagonal
+            elif not np.isnan(color_array[i, j]) and not pd.isna(count_array[i, j]):
                 if not noCellText:
                     annot[i, j] = f"{color_array[i, j]:.1f}\n(n={int(count_array[i, j])})"
+                else:
+                    annot[i, j] = ""
             else:
                 annot[i, j] = ""
 
