@@ -250,7 +250,7 @@ def create_heatmap(pairs, color_metric, mappingThreshold,
 
     plt.tight_layout()
 
-    plt.savefig(f'{color_metric}_{mappingThreshold}.pdf', dpi=600, bbox_inches='tight')
+    plt.savefig(f'{color_metric}_{mappingThreshold}_{cmap}.pdf', dpi=600, bbox_inches='tight')
 
 
 def extractFeatureGff(text, feature):
@@ -311,7 +311,8 @@ def main():
                            csv_dir=args.csv_dir,
                            order_file=args.order_file,
                            vmin=args.vmin,
-                           vmax=args.vmax)
+                           vmax=args.vmax,
+                           cmap=args.palette)
     create_heatmap(pairs, 'gene_presence', args.mappingThreshold,
                            title="Percentage of perfectly mapped genes present",
                            noCellText=args.noCellText,
@@ -319,7 +320,8 @@ def main():
                            csv_dir=args.csv_dir,
                            order_file=args.order_file,
                            vmin=args.vmin,
-                           vmax=args.vmax)
+                           vmax=args.vmax,
+                           cmap=args.palette)
 
 
 def parseCmd():
@@ -346,6 +348,8 @@ def parseCmd():
                         help='Minimum value for color scale')
     parser.add_argument('--vmax', type=float, default=100,
                         help='Maximum value for color scale')
+    parser.add_argument('--palette', type=str, default="magma_r",
+                        help='Color palette.')
 
     return parser.parse_args()
 
