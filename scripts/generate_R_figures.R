@@ -540,7 +540,7 @@ calc_crvStats <- function(x,
 
 ################################################################################
 # 3.1 Read in the kmer expansion curves
-nsamp <- 10
+nsamp <- 500
 
 pggrow <- rbind(
   data.table(species = "cotton", nGenomes = 1:length(kmerCot), nBp = kmerCot),
