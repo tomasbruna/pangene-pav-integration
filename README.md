@@ -40,8 +40,3 @@ Rscript scripts/generate_R_figures.R
    This will produce the R-based figures from the paper and save them in the `R_figures` output directory.
 
 ---
-
-## Data availability
-
-- Processed and raw data: [10.5281/zenodo.16809323](https://doi.org/10.5281/zenodo.16809323)
-- Original sources: see Supplementary Tables 1 and 2 in the manuscript.
