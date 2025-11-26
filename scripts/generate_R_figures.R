@@ -478,18 +478,18 @@ corRawCot <- subset(corRawCot, genome1 != genome2)
 
 # -- reorder for coloring
 corRawCot[,typeGrp := ifelse(pavgrp == pkgrp, as.character(pavgrp), "diff")]
-corRawCot[,typeGrp := factor(typeGrp, levels = c("integrative", "homology", "Phytozome", "diff"))]
+corRawCot[,typeGrp := factor(typeGrp, levels = c("homology", "integrative", "diff"))]
 
 # -- plot
 pltCotCorrs <- ggplot(subset(corRawCot, pkdist > 0 & pavdist > 0), aes(x = pkdist, y = pavdist, col = typeGrp, group = 1))+
   # stat_smooth(
   #   method = "lm", 
   #   se = F, linetype = 1, linewidth = 2)+
-  geom_point(size = .25)+
+  geom_point(size = 1)+
   facet_grid(type ~ ., switch = "y", scale = "free", space = "free")+
   
   # coord_fixed()+
-  scale_color_manual(values = c("green3", "dodgerblue2", "cyan",  "lightgrey"), guide = "none")+
+  scale_color_manual(values = c("green3", "dodgerblue2", "lightgrey"), guide = "none")+
   theme(axis.text = element_text(size = 6,color = "black"),
         axis.title = element_blank(),
         axis.ticks = element_blank(),
@@ -502,8 +502,8 @@ pltCotCorrs <- ggplot(subset(corRawCot, pkdist > 0 & pavdist > 0), aes(x = pkdis
         strip.text.y.left = element_text(angle=0, vjust=1),
         strip.text.y = element_text(margin = margin(t=-10, r=-30), size = 8),
         strip.background = element_blank())+
-  scale_y_continuous(expand = c(0.01,0.01))+
-  scale_x_continuous(expand = c(0.01,0.01))
+  scale_y_continuous(expand = c(0.05,0.05))+
+  scale_x_continuous(expand = c(0.02,0.02))
 
 ################################################################################
 ################################################################################
@@ -855,7 +855,7 @@ mdSoy[,nIGCGenes := ni[id]]
 
 ################################################################################
 # 5.2 get ordering vectors
-mdCot[,grpFac := factor(grp, levels = c("Phytozome", "homology", "integrative"))]
+mdCot[,grpFac := factor(grp, levels = c("homology", "integrative"))]
 setorder(mdCot, grpFac, -nRawGenes)
 rawCotOrd <- mdCot$id
 mdCot[,barOrd := 1:.N]
@@ -891,7 +891,7 @@ frdSoy[,pg := inNGenomes / nGenomes]
 cotGrp <- mdCot$grp; names(cotGrp) <- mdCot$id
 soyGrp <- mdSoy$grp; names(soyGrp) <- mdSoy$id
 frdCot[,`:=`(
-  consort = factor(cotGrp[as.character(genome)], levels = c("Phytozome",  "homology", "integrative")),
+  consort = factor(cotGrp[as.character(genome)], levels = c("homology", "integrative")),
   method = ifelse(grepl("Raw", grp), "Original", "IGC"))]
 frdSoy[,`:=`(
   consort = factor(soyGrp[as.character(genome)], levels = c("ref", "Phytozome", "Chu2021", "Liu2020")),
@@ -903,7 +903,7 @@ cntxSoy <- subset(frdSoy, !duplicated(paste(genome, grp)))
 
 # -- coloring
 pieCols <- RColorBrewer::brewer.pal(n = 5, name = "RdYlBu")
-conColsCot <- c("cyan", "green3", "dodgerblue2")
+conColsCot <- c("green3", "dodgerblue2", "lightgrey")
 conColsSoy <- c("black","cyan", "green3", "dodgerblue2")
 mxCot <- with(frdCot, max(tapply(n, paste(genome, method), sum)))
 mxSoy <- with(frdSoy, max(tapply(n, paste(genome, method), sum)))
