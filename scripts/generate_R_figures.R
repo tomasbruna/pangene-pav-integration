@@ -271,10 +271,22 @@ y <- with(subset(tpSoy, type != "pankmer"), data.table(
   pavgrp = ifelse(rugColx == rugColy, rugColx, "diff")))
 
 # -- merge
-corRawSoy <- merge(
+# First merge
+corRawSoy1 <- merge(
   subset(x, !duplicated(x)), 
   subset(y, !duplicated(y)), 
-  by = c("genome1", "genome2"))
+  by = c("genome1", "genome2")
+)
+# Second merge (swapping the columns)
+corRawSoy2 <- merge(
+  subset(x, !duplicated(x)),
+  subset(y, !duplicated(y)),
+  by.x = c("genome2", "genome1"),
+  by.y = c("genome1", "genome2")
+)
+# Combine the results
+corRawSoy <- rbind(corRawSoy1, corRawSoy2)
+# Filter out self-pairs if needed
 corRawSoy <- subset(corRawSoy, genome1 != genome2)
 
 # -- reorder for coloring
@@ -446,10 +458,22 @@ y <- with(subset(tpCot, type != "pankmer"), data.table(
   pavgrp = ifelse(rugColx == rugColy, rugColx, "diff")))
 
 # -- merge
-corRawCot <- merge(
-  subset(x, !duplicated(x)), 
-  subset(y, !duplicated(y)), 
-  by = c("genome1", "genome2"))
+# First merge
+corRawCot1 <- merge(
+  subset(x, !duplicated(x)),
+  subset(y, !duplicated(y)),
+  by = c("genome1", "genome2")
+)
+# Second merge (swapping the columns)
+corRawCot2 <- merge(
+  subset(x, !duplicated(x)),
+  subset(y, !duplicated(y)),
+  by.x = c("genome2", "genome1"),
+  by.y = c("genome1", "genome2")
+)
+# Combine the results
+corRawCot <- rbind(corRawCot1, corRawCot2)
+# Filter out self-pairs if needed
 corRawCot <- subset(corRawCot, genome1 != genome2)
 
 # -- reorder for coloring
