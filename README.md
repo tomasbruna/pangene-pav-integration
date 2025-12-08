@@ -3,7 +3,7 @@
 This repository contains the scripts and notebooks used to generate the analyses for the [Evolutionary and methodological considerations when interpreting gene presence–absence variation in pangenomes](https://www.biorxiv.org/content/10.1101/2025.08.14.670405v1) paper.
 
 
-All required datasets are automatically downloaded from [Zenodo](https://doi.org/10.5281/zenodo.16809323). Original data sources are listed in Supplementary Tables 1 and 2 of the paper.
+All required datasets are automatically downloaded from [Zenodo](https://doi.org/10.5281/zenodo.16809322). Original data sources are listed in Supplementary Tables 1 and 2 of the paper.
 
 ## Repository structure
 
