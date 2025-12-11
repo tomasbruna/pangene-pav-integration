@@ -320,7 +320,7 @@ pltCotCorrs <- ggplot(subset(corRawSoy, pkdist > 0 & pavdist > 0), aes(x = pkdis
 ################################################################################
 # 1.6 Combine plots and save
 
-pdf(file.path(out_dir, "fig1_v0.6_heatmapsCorSoyRaw.pdf"),
+pdf(file.path(out_dir, "fig2_v0.6_heatmapsCorSoyRaw.pdf"),
     height = 2.2, width = 9)
 cowplot::plot_grid(pltSoyHeatmaps, pltCotCorrs, rel_widths = c(3,1))
 dev.off()
