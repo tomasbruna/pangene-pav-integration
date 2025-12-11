@@ -36,7 +36,8 @@ cd pangene-pav-integration
    After executing the **data preparation**, **GENESPACE**, and **PanKmer** cells in both notebooks, run:
 ```bash
 Rscript scripts/generate_R_figures.R
+# For Figure 1:
+Rscript scripts/generate_pav_cnv_plants_amniotes.R
 ```
    This will produce the R-based figures from the paper and save them in the `R_figures` output directory.
-
 ---
